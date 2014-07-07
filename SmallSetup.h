@@ -18,6 +18,10 @@
 
 	/*** main() runs as normal, only contains runtime code ***/
 	__attribute__ ((naked)) int main();
-	int main(){ return (({while( ( serialEventRun ? serialEventRun() : ( void ) 0 ), loop(), true );}),0x00); }
-
+	
+	#ifdef __AVR_ATtiny25__
+		int main(){ return (({while( loop(), true );}),0x00); }
+	#else
+		int main(){ return (({while( ( serialEventRun ? serialEventRun() : ( void ) 0 ), loop(), true );}),0x00); }
+	#endif
 #endif
