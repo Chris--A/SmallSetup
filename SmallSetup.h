@@ -2,6 +2,11 @@
 //Written by Christopher Andrews, Provided under MIT & GPL licences.
 #if defined( __AVR__ ) && !defined( HEADER_SMALLSETUP )
 	#define HEADER_SMALLSETUP
+	
+	#if ARDUINO >= 157
+		inline void yield( void ){ return; }
+	#endif
+	
 	#include "wiring.c"
 
 	/*** init runs before constructors ***/
@@ -19,7 +24,11 @@
 	/*** main() runs as normal, only contains runtime code ***/
 	__attribute__ ((naked)) int main();
 	
-	#ifdef __AVR_ATtiny25__
+	#if defined( __AVR_ATtiny24__ ) || defined( __AVR_ATtiny25__ ) || \
+		defined( __AVR_ATtiny44__ ) || defined( __AVR_ATtiny45__ ) || \
+		defined( __AVR_ATtiny85__ ) || defined( __AVR_ATtiny85__ ) || \
+		defined( __AVR_ATtiny167__ ) || defined( __AVR_ATtiny861__ ) || \
+		defined( __AVR_ATtiny2313__ ) || defined( __AVR_ATtiny4313__ )
 		int main(){ return (({while( loop(), true );}),0x00); }
 	#else
 		int main(){ return (({while( ( serialEventRun ? serialEventRun() : ( void ) 0 ), loop(), true );}),0x00); }
